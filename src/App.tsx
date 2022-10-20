@@ -1,26 +1,27 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {Container, Row, Col} from "react-bootstrap";
+import Chart from "./components/Chart";
+import Rates from "./components/Rates";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const App: React.FunctionComponent = ()=>{
+
+    return (
+        <Container className={"pt-5 pb-5"}>
+            <Row className={"mb-4"}>
+                <Col>
+                    <h2 className={"text-center"}>Currencies information</h2>
+                </Col>
+            </Row>
+            <Row>
+                <Col className={"rates"}>
+                    <Rates/>
+                </Col>
+                <Col className={"chart"}>
+                    <Chart/>
+                </Col>
+            </Row>
+        </Container>
+    );
 }
 
 export default App;
