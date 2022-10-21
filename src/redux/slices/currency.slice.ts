@@ -20,8 +20,13 @@ export const getCurrencyRate = createAsyncThunk('currency/getCurrencyRate', asyn
         })
             .then(res=>res.json())
             .then(data=>{
-                localStorage.setItem('currency', JSON.stringify(data))
-                return data as iResult
+                if (!data.error){
+                    localStorage.setItem('currency', JSON.stringify(data))
+                    return data as iResult
+                }else {
+                    return data.error.message
+                }
+
             })
     }catch (err){
         return rejectWithValue(err)
@@ -33,7 +38,6 @@ const currencySlice = createSlice({
     initialState: {
         isLoading: false,
         result: {},
-        timeseries: {},
         error: ""
     },
     reducers: {},

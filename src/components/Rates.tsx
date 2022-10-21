@@ -9,13 +9,17 @@ const Rates: React.FunctionComponent = () => {
     const [currenciesRates, setCurrenciesRates] = useState<iResult>({})
     const isLoading: Boolean = useAppSelector(state => state.currency.isLoading)
     const error: string = useAppSelector(state => state.currency.error)
+    const rates: iResult = useAppSelector(state => state.currency.result)
 
     useEffect(() => {
-        console.log(localStorage.currency);
-        if (localStorage.currency){
-            setCurrenciesRates(JSON.parse(localStorage.getItem('currency')!))
-        }else{
+
+        if (!localStorage.currency){
             dispatch(getCurrencyRate())
+        }else {
+            const currencyFromLocalStorage = JSON.parse(localStorage.currency)
+            if (currencyFromLocalStorage.success){
+                setCurrenciesRates(currencyFromLocalStorage!)
+            }
         }
 
         const interval = setInterval(() => {
@@ -23,7 +27,7 @@ const Rates: React.FunctionComponent = () => {
         }, 3600000);
 
         return () => clearInterval(interval);
-    }, [dispatch])
+    }, [dispatch, rates])
 
     return (
         <div className={"currency"}>

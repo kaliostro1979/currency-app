@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -14,7 +14,7 @@ import {useAppDispatch, useAppSelector} from "../hooks/hooks";
 import {Button, Col, Form, Row} from 'react-bootstrap';
 import {getCurrencyTimeseries, iTimeseries} from "../redux/slices/timeseries.slice";
 import Preloader from "./UI/Preloader";
-import DatePicker, { DayValue } from '@hassanmojab/react-modern-calendar-datepicker'
+import DatePicker, {DayValue} from '@hassanmojab/react-modern-calendar-datepicker'
 
 ChartJS.register(
     CategoryScale,
@@ -65,21 +65,7 @@ export default function Chart() {
     const error = useAppSelector(state => state.timeseries.error)
     const isLoading = useAppSelector(state => state.timeseries.isLoading)
 
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        switch (e.target.name) {
-            case "base":
-                setBase(e.target.value)
-                break
-            case "symbol":
-                setSymbol(e.target.value)
-                break
-            default:
-                break
-        }
-    }
-
-    useMemo(()=>{
+    useEffect(() => {
         if (timeseries.rates) {
             const labels = Object.keys(timeseries.rates).map(rate => {
                 return rate
@@ -91,6 +77,16 @@ export default function Chart() {
             setDates(data);
         }
     }, [timeseries.rates, symbol])
+
+
+    const handleBase = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        setBase(e.target.value)
+    }, [])
+
+    const handleSymbol = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        setSymbol(e.target.value)
+    }, [])
+
 
     const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -129,13 +125,15 @@ export default function Chart() {
                         <Col>
                             <Form.Group className="mb-3" controlId="chart-date__start">
                                 <Form.Label className={"chart-form__label"}>Start date</Form.Label>
-                                <DatePicker value={startDay} onChange={setStartDay} inputClassName={"form-control date-picker__input"}/>
+                                <DatePicker value={startDay} onChange={setStartDay}
+                                            inputClassName={"form-control date-picker__input"}/>
                             </Form.Group>
                         </Col>
                         <Col>
                             <Form.Group className="mb-3" controlId="chart-date__end">
                                 <Form.Label className={"chart-form__label"}>End date</Form.Label>
-                                <DatePicker value={endDay} onChange={setEndDay} inputClassName={"form-control date-picker__input"}/>
+                                <DatePicker value={endDay} onChange={setEndDay}
+                                            inputClassName={"form-control date-picker__input"}/>
                             </Form.Group>
                         </Col>
                     </Row>
@@ -147,7 +145,7 @@ export default function Chart() {
                                     type="text"
                                     name={'base'}
                                     value={base ? base : ""}
-                                    onChange={handleChange}
+                                    onChange={handleBase}
                                     placeholder={"Enter currency ex. EUR"}
                                     required={true}
                                 />
@@ -160,7 +158,7 @@ export default function Chart() {
                                     type="text"
                                     name={'symbol'}
                                     value={symbol ? symbol : ""}
-                                    onChange={handleChange}
+                                    onChange={handleSymbol}
                                     placeholder={"Enter currency ex. GBP"}
                                     required={true}
                                 />
