@@ -11,7 +11,12 @@ const Rates: React.FunctionComponent = () => {
     const error: string = useAppSelector(state => state.currency.error)
 
     useEffect(() => {
-        setCurrenciesRates(JSON.parse(localStorage.getItem('currency')!))
+        console.log(localStorage.currency);
+        if (localStorage.currency){
+            setCurrenciesRates(JSON.parse(localStorage.getItem('currency')!))
+        }else{
+            dispatch(getCurrencyRate())
+        }
 
         const interval = setInterval(() => {
             dispatch(getCurrencyRate())
