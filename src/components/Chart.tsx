@@ -80,11 +80,11 @@ export default function Chart() {
 
 
     const handleBase = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-        setBase(e.target.value)
+        setBase(e.target.value.toUpperCase())
     }, [])
 
     const handleSymbol = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-        setSymbol(e.target.value)
+        setSymbol(e.target.value.toUpperCase())
     }, [])
 
 
